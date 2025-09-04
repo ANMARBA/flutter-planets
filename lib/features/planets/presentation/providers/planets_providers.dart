@@ -11,7 +11,6 @@ final planetsRepositoryProvider = Provider<PlanetsRepository>((ref) {
   throw UnimplementedError();
 });
 
-/* 2) UseCase provider */
 final getAvailableFieldsUseCaseProvider =
     Provider<GetAvailableFieldsUseCase>((ref) {
   final repo = ref.read(planetsRepositoryProvider);

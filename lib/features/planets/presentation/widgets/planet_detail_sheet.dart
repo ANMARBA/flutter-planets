@@ -1,14 +1,20 @@
 import 'package:flutter/material.dart';
 
-import 'package:flutter_planets/features/planets/domain/entities/planet_entity.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class PlanetDetailSheet extends StatelessWidget {
+import 'package:flutter_planets/features/planets/domain/entities/planet_entity.dart';
+import 'package:flutter_planets/features/planets/presentation/providers/favorites_providers.dart';
+
+class PlanetDetailSheet extends ConsumerWidget {
   final PlanetEntity planet;
 
   const PlanetDetailSheet({super.key, required this.planet});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final favorites = ref.watch(favoritesControllerProvider);
+    final isFav = favorites.contains(planet.name);
+
     return DraggableScrollableSheet(
       expand: false,
       initialChildSize: 0.6,
@@ -25,20 +31,29 @@ class PlanetDetailSheet extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Center(
-                child: CircleAvatar(
-                  backgroundImage: NetworkImage(planet.image),
-                  radius: 48,
-                ),
-              ),
-              const SizedBox(height: 16),
-              Text(
-                planet.name,
-                style: const TextStyle(
-                  fontSize: 22,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
-                ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    planet.name,
+                    style: const TextStyle(
+                      fontSize: 22,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
+                  ),
+                  IconButton(
+                    icon: Icon(
+                      isFav ? Icons.favorite : Icons.favorite_border,
+                      color: isFav ? Colors.red : Colors.white,
+                    ),
+                    onPressed: () {
+                      ref
+                          .read(favoritesControllerProvider.notifier)
+                          .toggle(planet.name);
+                    },
+                  ),
+                ],
               ),
               const SizedBox(height: 8),
               Text(
@@ -46,23 +61,18 @@ class PlanetDetailSheet extends StatelessWidget {
                 style: const TextStyle(color: Colors.white70),
               ),
               const Divider(height: 24, color: Colors.white24),
-              _buildStatRow(
-                  'Distancia orbital', '${planet.orbitalDistanceKm} km'),
-              _buildStatRow(
-                  'Radio ecuatorial', '${planet.equatorialRadiusKm} km'),
-              _buildStatRow('Volumen', '${planet.volumeKm3} km³'),
-              _buildStatRow('Masa', planet.massKg),
-              _buildStatRow('Densidad', '${planet.densityGCm3} g/cm³'),
-              _buildStatRow('Gravedad', '${planet.surfaceGravityMS2} m/s²'),
-              _buildStatRow(
-                  'Vel. de escape', '${planet.escapeVelocityKmh} km/h'),
-              _buildStatRow(
-                  'Duración del día', '${planet.dayLengthEarthDays} días'),
-              _buildStatRow(
-                  'Duración del año', '${planet.yearLengthEarthDays} días'),
-              _buildStatRow('Vel. orbital', '${planet.orbitalSpeedKmh} km/h'),
-              _buildStatRow('Atmósfera', planet.atmosphereComposition),
-              _buildStatRow('Lunas', '${planet.moons}'),
+              _stat('Distancia orbital', '${planet.orbitalDistanceKm} km'),
+              _stat('Radio ecuatorial', '${planet.equatorialRadiusKm} km'),
+              _stat('Volumen', '${planet.volumeKm3} km³'),
+              _stat('Masa', planet.massKg),
+              _stat('Densidad', '${planet.densityGCm3} g/cm³'),
+              _stat('Gravedad', '${planet.surfaceGravityMS2} m/s²'),
+              _stat('Vel. de escape', '${planet.escapeVelocityKmh} km/h'),
+              _stat('Duración del día', '${planet.dayLengthEarthDays} días'),
+              _stat('Duración del año', '${planet.yearLengthEarthDays} días'),
+              _stat('Vel. orbital', '${planet.orbitalSpeedKmh} km/h'),
+              _stat('Atmósfera', planet.atmosphereComposition),
+              _stat('Lunas', '${planet.moons}'),
             ],
           ),
         ),
@@ -70,7 +80,7 @@ class PlanetDetailSheet extends StatelessWidget {
     );
   }
 
-  Widget _buildStatRow(String label, String value) {
+  Widget _stat(String label, String value) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 4),
       child: Row(
