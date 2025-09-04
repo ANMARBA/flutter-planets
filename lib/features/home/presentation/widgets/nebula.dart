@@ -6,7 +6,6 @@ class Nebula extends StatelessWidget {
   final Offset center;
   final Color colorA;
   final Color colorB;
-
   final double radiusFactor;
   final double opacity;
 
@@ -21,28 +20,35 @@ class Nebula extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return LayoutBuilder(builder: (_, c) {
-      final w = c.maxWidth;
-      final h = c.maxHeight;
-      final r = math.min(w, h) * radiusFactor;
+    return LayoutBuilder(
+      builder: (_, c) {
+        final w = c.maxWidth;
+        final h = c.maxHeight;
+        final r = math.min(w, h) * radiusFactor;
 
-      return Positioned(
-        left: (w * center.dx) - r,
-        top: (h * center.dy) - r,
-        width: r * 2,
-        height: r * 2,
-        child: IgnorePointer(
-          child: Container(
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              gradient: RadialGradient(
-                colors: [colorA.withOpacity(opacity), colorB.withOpacity(0.0)],
-                stops: const [0.0, 1.0],
+        return Align(
+          alignment: Alignment(
+            (center.dx * 2) - 1,
+            (center.dy * 2) - 1,
+          ),
+          child: IgnorePointer(
+            child: Container(
+              width: r * 2,
+              height: r * 2,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                gradient: RadialGradient(
+                  colors: [
+                    colorA.withOpacity(opacity),
+                    colorB.withOpacity(0.0)
+                  ],
+                  stops: const [0.0, 1.0],
+                ),
               ),
             ),
           ),
-        ),
-      );
-    });
+        );
+      },
+    );
   }
 }
