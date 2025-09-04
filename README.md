@@ -1,16 +1,21 @@
-# flutter_planets
+# Planets
 
-A new Flutter project.
+**Planets** es una aplicación Flutter diseñada como prueba técnica para explorar el sistema solar.
+Permite visualizar un listado de planetas, filtrar por nombre, consultar su información detallada y marcarlos como favoritos.
+Los favoritos se almacenan de manera local para que el usuario pueda acceder a ellos en cualquier momento.
 
-## Getting Started
+## Comenzando
 
-This project is a starting point for a Flutter application.
+### Pre-requisitos
+- Flutter 3.22.2
+- Dart 3.4.3
 
-A few resources to get you started if this is your first Flutter project:
+### Instalación
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+Seguir las instrucciones del siguiente link: [Proceso de instalación](https://flutter.dev/docs/get-started/install)
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+### Para obtener las útlimas dependencias
+
+```shell
+flutter pub get
+```
